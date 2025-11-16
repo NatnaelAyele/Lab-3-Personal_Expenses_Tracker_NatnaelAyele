@@ -10,6 +10,7 @@ def menu():
         print("1. Check Remaining Balance")
         print("2. Add New Expense")
         print("3. View Expenses ")
+        print("4. Exit")
         choice = input("enter your choise: ")
         print("")
 
@@ -20,6 +21,8 @@ def menu():
                 add_expense()
             case '3':
                ...
+            case '4':
+                break
             case _:
                 print("Invalid choise")
 
