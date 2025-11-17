@@ -14,17 +14,16 @@ def menu():
         choice = input("enter your choise: ").strip()
         print("")
 
-        match choice:
-            case '1':
-                check_balance()
-            case '2':
-                add_expense()
-            case '3':
-                view_expense()
-            case '4':
-                break
-            case _:
-                print("Invalid choise")
+        if choice == '1':
+            check_balance()
+        elif choice == '2':
+            add_expense()
+        elif choice == '3':
+            view_expense()
+        elif choice == '4':
+            break
+        else:
+             print("Invalid choise")
 
         print("")
 
@@ -34,21 +33,22 @@ def check_balance():
         contetnt = f.read()
         print("="*8 + "Balance report" + "="*8, contetnt, sep='\n')
     while True:
-        choise = input("Want to add money (y/n): ").strip()
+        choise = input("Want to add money (y/n): ").lower().strip()
         
-        match choise:
-            case 'y' | 'Y':
-                amount = add_balance()
-                update_balance(amount)
-                break
+        if choise == 'y':
+            amount = add_balance()
+            update_balance(amount)
+            break
 
-            case 'n' | 'N':
-                break
+        elif choise == 'n':
+            break
+        else:
+            print("Invalid option")
 
 def  add_balance():
     while True:
-        amount = input("Enter amount: ")
-        if amount.stip():
+        amount = input("Enter amount: ").strip()
+        if amount:
             try:
                 amount = float(amount)
                 if amount <= 0:
@@ -83,16 +83,19 @@ def add_expense():
     print(f"Available balance is {current_balance}")
     date = get_valid_date()
     item_list = get_item_price()
+    print ("")
     print("="*9, "this are the inforation entered", "="*9)
     sum = 0
     for key in item_list:
         print(f"{key}: {item_list[key]}")
         sum += item_list[key]
+    print ("=" * 50)
+    print ("")
     while True:
-        confirmation = input("Is the above information correct (y/n): ").lower().stip()
+        confirmation = input("Is the above information correct (y/n): ").lower().strip()
         if confirmation:
-            match confirmation:
-                case 'y':
+        
+                if confirmation == 'y':
                     if sum < current_balance:
                         filename = f"expenses_{date}.txt"
 
@@ -128,7 +131,7 @@ def add_expense():
                     else:
                         print("insufficient balance! can not save expense")
                         break
-                case 'n':
+                elif confirmation == 'n':
                     break
         else:
             print("invalid input")
@@ -137,7 +140,7 @@ def add_expense():
 
 def get_valid_date():
     while True:
-        date_input = input("Enter date (YYYY-MM-DD): ").stip()
+        date_input = input("Enter date (YYYY-MM-DD): ").strip()
 
         try:
             valid_date = datetime.strptime(date_input, "%Y-%m-%d")
@@ -198,31 +201,31 @@ def view_expense():
         print("1. search by item name")
         print("2. search by amount")
         print("3. back to main menu")
-        choice = input("Enter your choice: ").stip()
-        match choice:
-            case '1':
-                while True:
-                    name = input("Enter name: ")
-                    if name.strip():
-                        results = search_by_item(name)
-                        print_search_results(results)
-                        break
-                    else:
-                        print("Invalid input")
+        choice = input("Enter your choice: ").strip()
+    
+        if choice == '1':
+            while True:
+                name = input("Enter name: ")
+                if name.strip():
+                    results = search_by_item(name)
+                    print_search_results(results)
+                    break
+                else:
+                    print("Invalid input")
 
-            case '2':
-                 while True:
-                    amount = input("Enter paid amount: ")
-                    if amount.stip():
-                        results = search_by_amount(amount)
-                        print_search_results(results)
-                        break
-                    else:
-                        print("Invalid input")
-            case '3':
-                break
-            case _:
-                print("invalid choice")
+        elif choice == '2':
+            while True:
+                amount = input("Enter paid amount: ")
+                if amount.strip():
+                    results = search_by_amount(amount)
+                    print_search_results(results)
+                    break
+                else:
+                     print("Invalid input")
+        elif choice == '3':
+            break
+        else:
+            print("invalid choice")
 
 def get_expense_files():
     files = []
@@ -277,11 +280,13 @@ def search_by_amount(amount):
 def print_search_results(results):
     if not results:
         print("No matches found.")
+        print("")
         return
 
     print("\n=== Search Results ===")
     for file, line in results:
         print(f"[{file}] {line}")
+        print("")
 
 
 menu()
