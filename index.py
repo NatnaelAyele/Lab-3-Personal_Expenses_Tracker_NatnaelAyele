@@ -11,7 +11,7 @@ def menu():
         print("2. Add New Expense")
         print("3. View Expenses ")
         print("4. Exit")
-        choice = input("enter your choise: ")
+        choice = input("enter your choise: ").strip()
         print("")
 
         match choice:
@@ -20,7 +20,7 @@ def menu():
             case '2':
                 add_expense()
             case '3':
-               ...
+                view_expense()
             case '4':
                 break
             case _:
@@ -34,7 +34,7 @@ def check_balance():
         contetnt = f.read()
         print("="*8 + "Balance report" + "="*8, contetnt, sep='\n')
     while True:
-        choise = input("Want to add money (y/n): ")
+        choise = input("Want to add money (y/n): ").strip()
         
         match choise:
             case 'y' | 'Y':
@@ -48,7 +48,7 @@ def check_balance():
 def  add_balance():
     while True:
         amount = input("Enter amount: ")
-        if amount:
+        if amount.stip():
             try:
                 amount = float(amount)
                 if amount <= 0:
@@ -89,7 +89,7 @@ def add_expense():
         print(f"{key}: {item_list[key]}")
         sum += item_list[key]
     while True:
-        confirmation = input("Is the above information correct (y/n): ").lower()
+        confirmation = input("Is the above information correct (y/n): ").lower().stip()
         if confirmation:
             match confirmation:
                 case 'y':
@@ -137,7 +137,7 @@ def add_expense():
 
 def get_valid_date():
     while True:
-        date_input = input("Enter date (YYYY-MM-DD): ")
+        date_input = input("Enter date (YYYY-MM-DD): ").stip()
 
         try:
             valid_date = datetime.strptime(date_input, "%Y-%m-%d")
@@ -191,6 +191,97 @@ def get_item_price():
         items[item] = price
 
     return items
+
+
+def view_expense():
+    while True:
+        print("1. search by item name")
+        print("2. search by amount")
+        print("3. back to main menu")
+        choice = input("Enter your choice: ").stip()
+        match choice:
+            case '1':
+                while True:
+                    name = input("Enter name: ")
+                    if name.strip():
+                        results = search_by_item(name)
+                        print_search_results(results)
+                        break
+                    else:
+                        print("Invalid input")
+
+            case '2':
+                 while True:
+                    amount = input("Enter paid amount: ")
+                    if amount.stip():
+                        results = search_by_amount(amount)
+                        print_search_results(results)
+                        break
+                    else:
+                        print("Invalid input")
+            case '3':
+                break
+            case _:
+                print("invalid choice")
+
+def get_expense_files():
+    files = []
+    for file in os.listdir():
+        if file.startswith("expenses_") and file.endswith(".txt"):
+            files.append(file)
+    return files
+
+def search_by_item(item_name):
+    files = get_expense_files()
+    item_name = item_name.lower()
+
+    results = []
+
+    for file in files:
+        with open(file) as f:
+            for line in f:
+                try:
+                    parts = line.strip().split(" | ")
+                    item = parts[1].lower()
+                    if item_name in item:
+                        results.append((file, line.strip()))
+                except:
+                    continue
+
+    return results
+
+def search_by_amount(amount):
+    files = get_expense_files()
+
+    try:
+        amount = float(amount)
+    except:
+        print("Amount must be a number.")
+        return []
+
+    results = []
+
+    for file in files:
+        with open(file) as f:
+            for line in f:
+                try:
+                    parts = line.strip().split(" | ")
+                    price = float(parts[2])
+                    if price == amount:
+                        results.append((file, line.strip()))
+                except:
+                    continue
+
+    return results
+
+def print_search_results(results):
+    if not results:
+        print("No matches found.")
+        return
+
+    print("\n=== Search Results ===")
+    for file, line in results:
+        print(f"[{file}] {line}")
 
 
 menu()
