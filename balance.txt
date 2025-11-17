@@ -1,0 +1,3 @@
+balance = 0
+Total expenses to date = 0
+available balance = 0
