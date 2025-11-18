@@ -4,6 +4,12 @@ from datetime import datetime
 import os
 
 
+def main():
+    menu()
+
+
+file_path = os.path.expanduser("~/Lab-3-Personal_Expenses_Tracker_NatnaelAyele/balance.txt")
+
 def menu():
     while True:
         print("="*8, "Welcome to personal expense tracker", "="*8 )
@@ -29,7 +35,7 @@ def menu():
 
 
 def check_balance():
-    with open ('balance.txt', 'r') as f:
+    with open (file_path, 'r') as f:
         contetnt = f.read()
         print("="*8 + "Balance report" + "="*8, contetnt, sep='\n')
     while True:
@@ -62,13 +68,13 @@ def  add_balance():
 
 
 def update_balance(amount):
-    with open('balance.txt', 'r')as f:
+    with open(file_path, 'r')as f:
         lines = f.readlines()
     current_balance = float(lines[0].split('=')[1].strip())
     available_balance = float(lines[2].split('=')[1].strip())
     lines[0] = f"balance = {amount + current_balance}\n"
     lines[2] = f"available balance = {amount + available_balance}"
-    with open('balance.txt', 'w') as f:
+    with open(file_path, 'w') as f:
         f.writelines(lines)
 
     print("Amount added to balance successfuly!")
@@ -76,7 +82,7 @@ def update_balance(amount):
 
 
 def add_expense():
-    with open('balance.txt') as f:
+    with open(file_path) as f:
         lines = f.readlines()
     current_balance = float(lines[0].split('=')[1].strip())
     current_expense = float(lines[1].split('=')[1].strip())
@@ -91,6 +97,10 @@ def add_expense():
         sum += item_list[key]
     print ("=" * 50)
     print ("")
+
+    filename = f"expenses_{date}.txt"
+    expense_file_path = os.path.expanduser(f"~/Lab-3-Personal_Expenses_Tracker_NatnaelAyele/{filename}")
+    
     while True:
         confirmation = input("Is the above information correct (y/n): ").lower().strip()
         if confirmation:
@@ -99,8 +109,8 @@ def add_expense():
                     if sum < current_balance:
                         filename = f"expenses_{date}.txt"
 
-                        if os.path.exists(filename):
-                            with open(filename, "r") as f:
+                        if os.path.exists(expense_file_path):
+                            with open(expense_file_path, "r") as f:
                                 lines = f.readlines()
                                 expense_id = len(lines) + 1
                         else:
@@ -110,14 +120,14 @@ def add_expense():
                         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         
-                        with open(filename, "a") as f:
+                        with open(expense_file_path, "a") as f:
                             for key in item_list:
                                 f.write(f"{expense_id}. {timestamp} | {key} | {item_list[key]}\n")
                                 expense_id += 1
 
                         
                         new_balance = current_balance - sum
-                        with open('balance.txt', 'r') as f:
+                        with open(file_path, 'r') as f:
                             lines = f.readlines()
                         lines[0] =f"balance = {new_balance}\n"
                         lines[1] =f"Total expenses to date = {current_expense + sum}\n"
@@ -227,11 +237,13 @@ def view_expense():
         else:
             print("invalid choice")
 
+expenses_dir = os.path.expanduser("~/Lab-3-Personal_Expenses_Tracker_NatnaelAyele/")
+
 def get_expense_files():
     files = []
-    for file in os.listdir():
+    for file in os.listdir(expenses_dir):
         if file.startswith("expenses_") and file.endswith(".txt"):
-            files.append(file)
+            files.append(os.path.join(expenses_dir, file))
     return files
 
 def search_by_item(item_name):
@@ -261,7 +273,7 @@ def search_by_amount(amount):
     except:
         print("Amount must be a number.")
         return []
-
+    
     results = []
 
     for file in files:
@@ -275,7 +287,8 @@ def search_by_amount(amount):
                 except:
                     continue
 
-    return results
+    return results   
+
 
 def print_search_results(results):
     if not results:
@@ -289,4 +302,6 @@ def print_search_results(results):
         print("")
 
 
-menu()
+
+if __name__ == "__main__":
+    main()
