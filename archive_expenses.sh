@@ -14,7 +14,7 @@ if [ -d "$DIR" ]; then
     # search for files that start with expenses and are .txt file inside the parent directory
     if compgen -G "$DIR/expenses*.txt" > /dev/null; then
 
-	# mv each expenses files from the parent directory to 'archives' directory and log the operation to a log file inside 'archcives' directory with timestamp 
+	# move each expenses files from the parent directory to 'archives' directory and log the operation to a log file inside 'archcives' directory with timestamp 
     	for file in "$DIR"/expenses*.txt; do
             	mv "$file" "$ARCHIVE_DIR"
             	echo "[$(date '+%Y-%m-%d %H:%M:%S')] Archived $file" >> "$LOG_FILE"
