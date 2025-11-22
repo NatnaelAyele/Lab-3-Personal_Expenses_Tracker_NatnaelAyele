@@ -18,8 +18,8 @@ def menu():
     while True:
         print("="*8, "Welcome to personal expense tracker", "="*8 )
         print("1. Check Remaining Balance")
-        print("2. Add New Expense")
-        print("3. View Expenses ")
+        print("2. View Expenses ")
+        print("3. Add New Expense")
         print("4. Exit")
         choice = input("enter your choise: ").strip()
         print("")
@@ -27,10 +27,11 @@ def menu():
         if choice == '1':
             check_balance()
         elif choice == '2':
-            add_expense()
-        elif choice == '3':
             view_expense()
+        elif choice == '3':
+            add_expense()
         elif choice == '4':
+            print("exiting program......")
             break
         else:
              print("Invalid choise")
