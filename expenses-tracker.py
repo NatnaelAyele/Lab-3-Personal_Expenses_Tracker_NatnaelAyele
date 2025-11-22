@@ -185,7 +185,7 @@ def get_valid_date():
 
     # an infinite loop that asks for date until a correct formated date is inserted
     while True:
-        date_input = input("Enter date (YYYY-MM-DD): ").strip()
+        date_input = input("Enter the date the items were bought (format: YYYY-MM-DD): ").strip()
 
         try:
             valid_date = datetime.strptime(date_input, "%Y-%m-%d")
