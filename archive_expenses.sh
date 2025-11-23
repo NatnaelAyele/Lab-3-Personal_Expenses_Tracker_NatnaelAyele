@@ -17,7 +17,7 @@ if [ -d "$DIR" ]; then
 	# move each expenses files from the parent directory to 'archives' directory and log the operation to a log file inside 'archcives' directory with timestamp 
     	for file in "$DIR"/expenses*.txt; do
             	mv "$file" "$ARCHIVE_DIR"
-            	echo " Archived $(basename $"file") on [$(date '+%Y-%m-%d %H:%M:%S')] >> "$LOG_FILE"
+            	echo " Archived $(basename "$file") on [$(date '+%Y-%m-%d %H:%M:%S')]" >> "$LOG_FILE"
     	done
     	echo "archived all files successfuly!!!"
     else
